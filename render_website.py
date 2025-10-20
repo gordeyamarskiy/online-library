@@ -3,11 +3,13 @@ import json
 from livereload import Server
 import os
 from more_itertools import chunked
+from dotenv import load_dotenv
 
 def on_reload():
-    
+    load_dotenv()
     os.makedirs("pages", exist_ok=True)
-    with open("meta_data.json", "r", encoding="utf8") as my_file:
+    file_path = os.getenv('FILE_PATH', 'meta_data.json')
+    with open(file_path, "r", encoding="utf8") as my_file:
         books = json.load(my_file)
 
     env = Environment(
@@ -25,8 +27,15 @@ def on_reload():
         )
         with open(f"pages/index{number + 1}.html", 'w', encoding="utf8") as file:
             file.write(rendered_page)
-on_reload()
-server = Server()
-server.watch('template.html', on_reload)
-server.serve(root='.', default_filename="./pages/index1.html")
 
+
+def main():
+    on_reload()
+    server = Server()
+    server.watch('template.html', on_reload)
+    server.serve(root='.', default_filename="./pages/index1.html")
+    
+
+
+if __name__=="main":
+    main()
