@@ -5,11 +5,12 @@ import os
 from more_itertools import chunked
 from dotenv import load_dotenv
 
+
 def on_reload():
     load_dotenv()
-    os.makedirs("pages", exist_ok=True)
+    os.makedirs('pages', exist_ok=True)
     file_path = os.getenv('FILE_PATH', 'meta_data.json')
-    with open(file_path, "r", encoding="utf8") as my_file:
+    with open(file_path, 'r', encoding='utf8') as my_file:
         books = json.load(my_file)
 
     env = Environment(
@@ -25,7 +26,7 @@ def on_reload():
         current_page = number + 1,  
         total_pages = len(books_on_pages)
         )
-        with open(f"pages/index{number + 1}.html", 'w', encoding="utf8") as file:
+        with open(f'pages/index{number + 1}.html', 'w', encoding='utf8') as file:
             file.write(rendered_page)
 
 
@@ -33,9 +34,9 @@ def main():
     on_reload()
     server = Server()
     server.watch('template.html', on_reload)
-    server.serve(root='.', default_filename="./pages/index1.html")
+    server.serve(root='.', default_filename='./pages/index1.html')
     
 
 
-if __name__=="main":
+if __name__ == '__main__':
     main()
